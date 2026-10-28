@@ -8,9 +8,9 @@ type Options = {
 };
 
 export const jwtdec = (): Command => {
-  const command = new Command('jwtdec');
+  const cmd = new Command('jwtdec');
 
-  command
+  cmd
     .description('Decode JWTs')
     .addArgument(new Argument('<jwt>', 'Encoded JWT'))
     .addOption(new Option('-s, --secret <secret>', 'Verify signature with secret'))
@@ -21,10 +21,10 @@ export const jwtdec = (): Command => {
         if (opts.algorithm) {
           options.algorithms = [opts.algorithm as jwt.Algorithm];
         }
-        console.table(jwt.verify(token, opts.secret, options));
+        console.log(jwt.verify(token, opts.secret, options));
       } else {
         console.log(jwt.decode(token));
       }
     });
-  return command;
+  return cmd;
 };
