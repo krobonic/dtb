@@ -1,6 +1,6 @@
 import { Command } from 'commander';
 import { version } from '../package.json';
-import { jwtdec } from './commands/jwtdec.ts';
+import { jwtdec } from './commands/jwtdec/jwtdec.ts';
 
 const program = new Command();
 
