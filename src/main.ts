@@ -7,7 +7,7 @@ import { basicAuth } from './commands/basicauth/basicauth.ts';
 const program = new Command();
 
 program
-  .name('Dev Tool Box')
+  .name('dtb')
   .description('A CLI with useful utilities for developers')
   .addOption(new Option('-o, --output <output>', 'Output format').choices(outputTypes))
   .version('v' + version, '-v, --version')
