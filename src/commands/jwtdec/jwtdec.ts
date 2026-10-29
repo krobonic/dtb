@@ -1,6 +1,8 @@
 import { Argument, Command, Option } from 'commander';
 import * as jwt from 'jsonwebtoken';
 import { algorithms } from './consts.ts';
+import { output } from '../../output.ts';
+import type { GlobalOptions } from '../../types.ts';
 
 type Options = {
   secret?: string;
@@ -15,15 +17,17 @@ export const jwtdec = (): Command => {
     .addArgument(new Argument('<jwt>', 'Encoded JWT'))
     .addOption(new Option('-s, --secret <secret>', 'Verify signature with secret'))
     .addOption(new Option('-a, --algorithm <algorithm>', 'Signature algorithm').choices(algorithms))
-    .action((token, opts: Options) => {
+    .action((token, _opts: Options, command) => {
+      const opts = command.optsWithGlobals() as Options & GlobalOptions;
+
       if (opts.secret) {
-        let options: jwt.VerifyOptions = {};
+        const options: jwt.VerifyOptions = { complete: true };
         if (opts.algorithm) {
           options.algorithms = [opts.algorithm as jwt.Algorithm];
         }
-        console.log(jwt.verify(token, opts.secret, options));
+        output(jwt.verify(token, opts.secret, options), opts.output);
       } else {
-        console.log(jwt.decode(token));
+        output(jwt.decode(token, { complete: true }), opts.output);
       }
     });
   return cmd;
