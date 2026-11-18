@@ -4,6 +4,7 @@ A CLI with useful utilities for developers. Currently, it can:
 
 - Decode JWT headers, payloads, and signatures, with optional verification.
 - Generate Basic Auth authorization header values.
+- Generate salted Argon2id or bcrypt password hashes.
 - Display results as JavaScript values, JSON, YAML, or tables.
 
 ## Getting started
@@ -62,9 +63,23 @@ bun run src/main.ts ba -u alice -p secret
 
 The result is the header value: use it as `Authorization: Basic YWxpY2U6c2VjcmV0`.
 
+## Generate password hashes
+
+Use `passhash` (or its alias `ph`) with a required password:
+
+```bash
+bun run src/main.ts passhash --password secret
+bun run src/main.ts ph -p secret --algorithm bcrypt
+bun run src/main.ts --output json passhash -p secret
+```
+
+The default algorithm is `argon2id`; `-a, --algorithm` also accepts `bcrypt`.
+Each invocation generates a fresh salt. The resulting hash includes the salt and algorithm parameters needed for verification.
+Passwords supplied on the command line may appear in shell history and process listings.
+
 ## Output formats and help
 
-The global `-o, --output <format>` option works with both commands:
+The global `-o, --output <format>` option works with all commands:
 
 | Format | Output |
 | --- | --- |
@@ -78,6 +93,7 @@ bun run src/main.ts --output yaml jwtdec "$TOKEN"
 bun run src/main.ts --output json ba -u alice -p secret
 bun run src/main.ts jwtdec --help
 bun run src/main.ts basicauth --help
+bun run src/main.ts passhash --help
 ```
 
 ## Development

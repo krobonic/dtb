@@ -3,6 +3,7 @@ import { version } from '../package.json';
 import { jwtdec } from './commands/jwtdec/jwtdec.ts';
 import { outputTypes } from './output.ts';
 import { basicAuth } from './commands/basicauth/basicauth.ts';
+import { passhash } from './commands/passhash/passhash.ts';
 
 const program = new Command();
 
@@ -13,4 +14,6 @@ program
   .version('v' + version, '-v, --version')
   .addCommand(jwtdec())
   .addCommand(basicAuth())
-  .parse();
+  .addCommand(passhash());
+
+await program.parseAsync();
